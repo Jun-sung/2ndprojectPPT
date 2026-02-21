@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=1280, height=720, initial-scale=1.0" name="viewport"/>
+  <title>SAFE HOME Portfolio Slide</title>
+
+  <!-- Tailwind & Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet"/>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;        /* ← 스냅 컨테이너에 고정 높이 필수 */
+      width: 100vw;
+      overflow: hidden;
+    }
+    
+    
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow-x: hidden;
+      font-family: 'Noto Sans JP', sans-serif;
+      background: #f5f7fb;
+      color: #0f172a;
+    /* 섹션 스냅 설정 */
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+      scroll-behavior: smooth;
+    }
+
+    /* 전체 슬라이드 컨테이너 */
+
+    .slide {
+      width: 100vw;
+      height: 100vh;
+	  padding: 50px 80px; /* 여백을 넓혀 가독성 확보 */
+      display: flex;
+      flex-direction: column;
+scroll-snap-align: start;
+      scroll-snap-stop: always; /* 한 번에 한 섹션씩만 이동 */
+      
+      background: radial-gradient(circle at top left, #e0f2fe 0, transparent 55%),
+                  radial-gradient(circle at bottom right, #fee2e2 0, transparent 55%),
+                  #f5f7fb;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    /* .slide.active 제거됨 */
+
+    /* 헤더 공통 */
+    .slide-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+      flex-shrink: 0;
+    }
+
+    .slide-title {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 26px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .slide-title span.badge-no {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #2563eb, #38bdf8);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .slide-page {
+      font-size: 14px;
+      color: #6b7280;
+      font-weight: 500;
+    }
+
+    .slide-content {
+      flex: 1;
+      display: flex;
+      gap: 28px;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .col-left {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .col-right {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* 카드 / 박스 공통 */
+    .card {
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      padding: 13px 16px;
+      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.04);
+      flex-shrink: 0;
+    }
+
+    .card-header-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .pill-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      padding: 4px 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .pill-blue {
+      background: rgba(37, 99, 235, 0.09);
+      color: #1d4ed8;
+    }
+
+    .pill-amber {
+      background: rgba(245, 158, 11, 0.1);
+      color: #b45309;
+    }
+
+    .pill-pink {
+      background: rgba(236, 72, 153, 0.1);
+      color: #be185d;
+    }
+
+    .pill-emerald {
+      background: rgba(16, 185, 129, 0.1);
+      color: #047857;
+    }
+
+    .pill-violet {
+      background: rgba(139, 92, 246, 0.1);
+      color: #5b21b6;
+    }
+
+    .card-title-text {
+      font-size: 19px;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title-text i {
+      color: #2563eb;
+    }
+
+    .card-body-text {
+	font-size: 15px;
+      line-height: 1.85; /* 행간 확장 */
+      letter-spacing: -0.01em; /* 자간 미세 조정 */
+      word-break: keep-all; /* 단어 단위 줄바꿈 */
+      overflow-wrap: break-word;
+      color: #334155;
+    }
+
+    .card-body-text strong {
+      color: #111827;
+      font-weight: 600;
+    }
+
+    ul.feature-list,
+    ul.simple-list {
+      margin: 5px 0 0;
+      padding-left: 16px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #374151;
+    }
+
+    ul.feature-list li::marker,
+    ul.simple-list li::marker {
+      color: #2563eb;
+    }
+
+    /* 플레이스홀더 영역(그림/영상) */
+    /* 사진/동영상 플레이스홀더 영역 */
+    .placeholder-box {
+      background: #f8fafc;
+      border-radius: 16px;
+      border: 2px dashed #cbd5e1;
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      transition: all 0.3s ease;
+    }
+
+    .placeholder-box:hover {
+      border-color: #00897B;
+      background: #E8F5E9;
+    }
+
+    .placeholder-box i {
+      font-size: 52px;
+      margin-bottom: 14px;
+      color: #cbd5e1;
+    }
+
+    /* 15번 Troubleshooting 전용 가로 레이아웃 */
+    .trouble-full-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* Cover 전용 */
+    .cover-main-title {
+      font-size: 54px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      margin-bottom: 10px;
+      color: #0f172a;
+    }
+
+    .cover-main-title span {
+      color: #2563eb;
+    }
+
+    .cover-subtitle {
+      font-size: 17px;
+      line-height: 1.6;
+      color: #334155;
+      max-width: 680px;
+      border-left: 4px solid #2563eb;
+      padding-left: 16px;
+      margin-bottom: 18px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px 32px;
+      max-width: 640px;
+      font-size: 14px;
+    }
+
+    .info-label {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6b7280;
+      margin-bottom: 3px;
+      font-weight: 700;
+    }
+
+    .info-value {
+      font-size: 15px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .github-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+      padding: 10px 18px;
+      font-size: 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(15, 23, 42, 0.1);
+      background: #ffffff;
+      color: #111827;
+      text-decoration: none;
+      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.06);
+    }
+
+    .github-link i {
+      font-size: 18px;
+    }
+
+    /* 아래쪽 요약 캡션 */
+    .bottom-caption {
+      margin-top: 8px;
+      font-size: 12px;
+      text-align: center;
+      color: #6b7280;
+      font-style: italic;
+    }
+
+    /* Trouble 카드 */
+    .trouble-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .trouble-card {
+      position: relative;
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      padding: 14px 14px 12px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .trouble-issue-label {
+      font-size: 11px;
+      color: #b91c1c;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .trouble-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 4px 0;
+      color: #111827;
+    }
+
+    .trouble-desc {
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+
+    .trouble-solution-label {
+      font-size: 11px;
+      color: #047857;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .code-box {
+      margin-top: 6px;
+      font-family: "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      background: #0f172a;
+      color: #e5e7eb;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 11px;
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
+
+    /* Learning / Future */
+    .two-column-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .pill-icon-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+
+    .item-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .item-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 2px;
+    }
+
+    .item-desc {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+
+    .conclusion-box {
+      margin-top: auto;
+      background: rgba(16, 185, 129, 0.08);
+      border-radius: 12px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #047857;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    /* ── 누락 CSS 보완 ── */
+    .placeholder-main {
+      font-size: 16px;
+      font-weight: 700;
+      color: #64748b;
+      margin-top: 12px;
+    }
+    .placeholder-sub {
+      font-size: 13px;
+      color: #94a3b8;
+      text-align: center;
+      max-width: 320px;
+      line-height: 1.6;
+      margin-top: 6px;
+    }
+    .column-highlight {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 12px;
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      background: #f1f5f9;
+      color: #2563eb;
+      border-radius: 6px;
+      padding: 4px 10px;
+      letter-spacing: 0.02em;
+    }
+
+    /* Troubleshooting 가로형 아이템 */
+    .trouble-item-horizontal {
+      display: grid;
+      grid-template-columns: 160px 1fr 1fr;
+      gap: 0;
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid rgba(15,23,42,0.07);
+      box-shadow: 0 4px 14px rgba(15,23,42,0.05);
+      overflow: hidden;
+    }
+    .trouble-meta {
+      background: #0f172a;
+      color: #fff;
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .issue-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #f87171;
+      background: rgba(248,113,113,0.15);
+      border-radius: 999px;
+      padding: 3px 10px;
+      margin-bottom: 4px;
+    }
+    .trouble-issue {
+      padding: 16px 20px;
+      border-right: 1px solid rgba(15,23,42,0.07);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .trouble-solution {
+      padding: 16px 20px;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .solution-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #059669;
+      background: rgba(16,185,129,0.12);
+      border-radius: 999px;
+      padding: 3px 10px;
+      margin-bottom: 4px;
+    }
+    /* ── Tech Stack Slide 6 ── */
+    .tech-grid {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      align-items: stretch;
+    }
+    .tech-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid rgba(15,23,42,0.07);
+      overflow: hidden;
+    }
+    .tech-column:last-child { border-right: none; }
+    .column-header {
+      padding: 12px 8px 10px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .backend-col  { background: linear-gradient(135deg,#eff6ff,#dbeafe); border-bottom: 2px solid #2563eb; }
+    .database-col { background: linear-gradient(135deg,#ecfdf5,#d1fae5); border-bottom: 2px solid #059669; }
+    .frontend-col { background: linear-gradient(135deg,#fdf4ff,#ede9fe); border-bottom: 2px solid #7c3aed; }
+    .api-col      { background: linear-gradient(135deg,#fff7ed,#fed7aa); border-bottom: 2px solid #d97706; }
+    .tools-col    { background: linear-gradient(135deg,#fef2f2,#fecaca); border-bottom: 2px solid #dc2626; }
+    .ai-col { background: linear-gradient(135deg,#faf5ff,#ede9fe); border-bottom: 2px solid #7c3aed; }
+    .column-title    { font-size: 14px; font-weight: 800; color: #0f172a; margin: 0 0 2px; }
+    .column-subtitle { font-size: 11px; color: #64748b; margin: 0; font-weight: 500; }
+    .logo-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 4px;
+      border-bottom: 1px solid rgba(15,23,42,0.05);
+      background: #fff;
+      min-height: 0;
+    }
+    .logo-card:last-child { border-bottom: none; }
+    .logo-card:hover { background: #f8fafc; }
+    .logo-image-container {
+      width: 48px; height: 48px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #f8fafc;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 5px;
+      flex-shrink: 0;
+    }
+    .logo-img { width: 100%; height: 100%; object-fit: contain; }
+    .tech-name    { font-size: 12px; font-weight: 700; color: #111827; margin: 0 0 1px; text-align: center; }
+    .tech-version { font-size: 10px; color: #6b7280; margin: 0; text-align: center; }
+	.placeholder-box .img{
+		height: 100%;
+		border-radius: 16px;
+	}
+	
+	.iframe{
+			height: 100%;
+		border-radius: 16px;
+	}
+    
+  </style>
+</head>
+<body>
+
+<section class="slide" data-index="1">
+      <header class="slide-header">
+        <div class="slide-title"></div>
+        <div class="slide-page">01 / 15</div>
+      </header>
+      <div class="slide-content">
+        <div class="col col-left" style="justify-content:space-between; overflow:visible;">
+          <div>
+            <h1 class="cover-main-title">SAFE <span>HOME</span></h1>
+            <p class="cover-subtitle">
+              日本不動産取引データ × ハザードマップ × AIチャット<br>
+              リスク情報と物件情報を統合した不動産情報プラットフォーム
+            </p>
+          </div>
+
+          <div class="info-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 28px;max-width:100%;">
+            <div>
+              <div class="info-label">PROJECT TYPE</div>
+              <div class="info-value">個人プロジェクト — Spring Boot</div>
+            </div>
+            <div>
+              <div class="info-label">DEVELOPMENT PERIOD</div>
+              <div class="info-value">2026.02.10 — 02.20（10日間）</div>
+            </div>
+            <div>
+              <div class="info-label">DEVELOPER</div>
+              <div class="info-value">高俊成（Ko Junsung） / 個人開発</div>
+            </div>
+            <div>
+              <div class="info-label">LANGUAGE</div>
+              <div class="info-value">Java 17 / JavaScript</div>
+            </div>
+            <div>
+              <div class="info-label">FRAMEWORK</div>
+              <div class="info-value">Spring Boot 3.5 / MyBatis 3.0</div>
+            </div>
+            <div>
+              <div class="info-label">DATABASE</div>
+              <div class="info-value">MySQL 8.0</div>
+            </div>
+          </div>
+
+          <div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
+              <span class="pill-label" style="background:rgba(37,99,235,0.09);color:#1d4ed8;font-size:13px;padding:6px 14px;"><i class="fas fa-map-marked-alt"></i>&nbsp; ハザードマップ統合</span>
+              <span class="pill-label" style="background:rgba(16,185,129,0.09);color:#047857;font-size:13px;padding:6px 14px;"><i class="fas fa-building"></i>&nbsp; 不動産取引データ可視化</span>
+              <span class="pill-label" style="background:rgba(139,92,246,0.09);color:#5b21b6;font-size:13px;padding:6px 14px;"><i class="fas fa-robot"></i>&nbsp; Gemini AI チャット</span>
+              <span class="pill-label" style="background:rgba(245,158,11,0.09);color:#b45309;font-size:13px;padding:6px 14px;"><i class="fas fa-shield-alt"></i>&nbsp; Spring Security 認証</span>
+              <span class="pill-label" style="background:rgba(15,23,42,0.07);color:#374151;font-size:13px;padding:6px 14px;"><i class="fas fa-language"></i>&nbsp; 日韓 多言語対応</span>
+            </div>
+            <a class="github-link" href="#" onclick="return false;">
+              <i class="fab fa-github"></i>
+              <span>GitHub Repository Link（デモ用プレースホルダー）</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="col col-right">
+          <div class="placeholder-box">
+          	 <img class="img" alt="main" src="/safehomeppt/main.png">
+          </div>
+        </div>
+      </div>
+    </section>
+
+<section class="slide" data-index="2">
+      <header class="slide-header">
+        <div class="slide-title">
+          <span class="badge-no">02</span>
+          <div>企画意図 (Concept)</div>
+        </div>
+        <div class="slide-page">02 / 15</div>
+      </header>
+      <div class="slide-content">
+        <div class="col col-left">
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-blue"><i class="fas fa-bullseye"></i> PURPOSE</span>
+              <div class="card-title-text">開発目的</div>
+            </div>
+            <p class="card-body-text">
+              <strong>Spring Boot + MyBatis + Spring Security</strong> を活用したフルスタック開発の一連の流れ
+              （認証・DB・外部API連携・フロント）を通して、
+              実務に近い形でのバックエンド開発スキルを身につけることを目的としました。<br>
+              国土交通省 Reinfolib API と連携し、実データを扱いながら
+              <strong>データ取得 → 加工 → 地図表示</strong> まで実装しました。
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-violet"><i class="fas fa-exclamation-triangle"></i> PROBLEM</span>
+              <div class="card-title-text">解決したい課題</div>
+            </div>
+            <p class="card-body-text">
+              日本では不動産情報とハザードリスク情報が別々のサービスに分かれており、
+              <strong>「価格は安いが災害リスクは高い地域」</strong>などを一目で判断しづらいという課題があります。<br>
+              SAFE HOME では、
+              <strong>「物件情報」と「災害リスク」を一画面で統合確認</strong>
+              できる UI を提供し、安全な住まい探しをサポートすることを目指しました。
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-pink"><i class="fas fa-star"></i> FEATURES</span>
+              <div class="card-title-text">主要機能</div>
+            </div>
+            <ul class="feature-list">
+              <li><strong>物件情報の可視化：</strong> 国土交通省の不動産取引価格データを Leaflet 地図上にポップアップ付きで表示</li>
+              <li><strong>ハザードマップ統合：</strong> 洪水（6段階）・津波（5段階）・土砂災害（2段階）のリスクゾーンを GeoJSON ポリゴンとして重ね合わせ</li>
+              <li><strong>AIチャット相談：</strong> Gemini 1.5 Flash API を用いて、地域の特徴や条件に合うエリアの候補を日・韓 2言語で提案</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col col-right">
+          <div class="placeholder-box">
+            <img class="img" alt="concept" src="/safehomeppt/conceptflow.svg">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 3. ユーザー別要件 ===================== -->
+
+<section class="slide" data-index="3">
+      <header class="slide-header">
+        <div class="slide-title">
+          <span class="badge-no">03</span>
+          <div>ユーザー別要件 (User Requirements)</div>
+        </div>
+        <div class="slide-page">03 / 15</div>
+      </header>
+
+      <div class="slide-content">
+        <div class="col col-left">
+          <!-- 非会員 -->
+          <div class="card">
+            <div class="card-header-row">
+              <div class="card-title-text">
+                <span class="pill-icon-circle" style="background:rgba(16,185,129,0.1);color:#059669;">
+                  <i class="fas fa-user"></i>
+                </span>
+                非会員 / GUEST
+              </div>
+              <span class="pill-label pill-emerald" style="margin-left:auto;">PUBLIC ACCESS</span>
+            </div>
+            <p class="card-body-text">
+              会員登録なしで、
+              <strong>物件マップ閲覧・ハザード情報確認・地域検索・AIチャット相談</strong> にアクセス可能。
+              「まずはリスク感だけ知りたい」ユーザーを想定しています。
+            </p>
+          </div>
+
+          <!-- 会員 -->
+          <div class="card">
+            <div class="card-header-row">
+              <div class="card-title-text">
+                <span class="pill-icon-circle" style="background:rgba(37,99,235,0.1);color:#2563eb;">
+                  <i class="fas fa-user-check"></i>
+                </span>
+                会員 / USER
+              </div>
+              <span class="pill-label pill-blue" style="margin-left:auto;">AUTHENTICATED</span>
+            </div>
+            <p class="card-body-text">
+              非会員機能に加えて、
+              <strong>Q&amp;A 質問の作成・編集・削除、マイページでの質問履歴管理、パスワード変更</strong>
+              などの個人向け機能を利用できます。
+            </p>
+          </div>
+
+          <!-- 運営者 -->
+          <div class="card">
+            <div class="card-header-row">
+              <div class="card-title-text">
+                <span class="pill-icon-circle" style="background:rgba(248,113,113,0.1);color:#b91c1c;">
+                  <i class="fas fa-user-shield"></i>
+                </span>
+                運営者 / ADMIN
+              </div>
+              <span class="pill-label pill-pink" style="margin-left:auto;">FULL CONTROL</span>
+            </div>
+            <p class="card-body-text">
+              全機能に加え、
+              <strong>全ユーザーの質問管理・回答、会員一覧・統計ダッシュボード、規約違反ユーザーの強制退会</strong>
+              など、運営に必要な権限を持ちます。
+            </p>
+          </div>
+
+          <!-- セキュリティ・UX -->
+          <div class="card">
+            <div class="card-header-row">
+              <div class="card-title-text">
+                <span class="pill-icon-circle" style="background:rgba(245,158,11,0.1);color:#b45309;">
+                  <i class="fas fa-lock"></i>
+                </span>
+                セキュリティ / UX 要件
+              </div>
+            </div>
+            <div class="card-body-text" style="margin-bottom:6px;">
+              ロールごとのアクセス制御だけでなく、「使いやすさ」と「安全性」の両立を意識して設計。
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-left:48px;">
+              <span class="pill-label" style="background:#0f172a;color:#e5e7eb;">
+                <i class="fas fa-shield-alt"></i> RBAC
+              </span>
+              <span class="pill-label" style="background:#0f172a;color:#e5e7eb;">
+                <i class="fas fa-key"></i> BCrypt パスワード暗号化
+              </span>
+              <span class="pill-label" style="background:#0f172a;color:#e5e7eb;">
+                <i class="fas fa-bolt"></i> AJAX ログイン
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col col-right">
+          <div class="placeholder-box">
+             <img class="img" alt="require" src="/safehomeppt/requirements.png">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 4. ユースケース ===================== -->
+
+<section class="slide" data-index="4">
+      <header class="slide-header">
+        <div class="slide-title">
+          <span class="badge-no">04</span>
+          <div>ユースケース (Use Case)</div>
+        </div>
+        <div class="slide-page">04 / 15</div>
+      </header>
+
+      <div class="slide-content">
+        <div class="col col-left" style="overflow-y:auto;padding-right:6px;">
+          <!-- 全員 -->
+          <div class="card" style="border-left:4px solid #2563eb;">
+            <div class="card-header-row">
+              <div class="card-title-text">
+                <i class="fas fa-users" style="color:#2563eb;"></i>
+                全員 (All Users)
+              </div>
+            </div>
+            <ul class="simple-list">
+              <li>地図上の物件マーカー（取引価格・面積など）の確認</li>
+              <li>フィルター検索（価格帯・築年数・間取り）</li>
+              <li>物件詳細ポップアップ表示</li>
+              <li>ハザード情報オーバーレイ（洪水・津波・土砂災害）</li>
+              <li>避難所マーカーの動的表示</li>
+            </ul>
+          </div>
+
+          <!-- 会員以上 -->
+          <div class="card" style="border-left:4px solid #10b981;">
+            <div class="card-header-row">
+              <div class="card-title-text">
+                <i class="fas fa-user-check" style="color:#059669;"></i>
+                会員以上 (Members)
+              </div>
+            </div>
+            <ul class="simple-list">
+              <li>物件・エリアに関する Q&amp;A 質問の作成</li>
+              <li>自分の質問の編集・削除</li>
+              <li>管理者からの回答内容の確認</li>
+              <li>マイページでの質問履歴一覧</li>
+            </ul>
+          </div>
+
+          <!-- 管理者 -->
+          <div class="card" style="border-left:4px solid #ec4899;">
+            <div class="card-header-row">
+              <div class="card-title-text">
+                <i class="fas fa-user-shield" style="color:#be185d;"></i>
+                管理者 (Admins)
+              </div>
+            </div>
+            <ul class="simple-list">
+              <li>全質問への回答・管理（不適切な質問の削除含む）</li>
+              <li>会員一覧・利用統計のダッシュボード確認</li>
+              <li>規約違反ユーザーの強制退会処理</li>
+            </ul>
+          </div>
+
+          <!-- 認証 -->
+          <div class="card" style="border-left:4px solid #f59e0b;">
+            <div class="card-header-row">
+              <div class="card-title-text">
+                <i class="fas fa-key" style="color:#b45309;"></i>
+                認証 (Authentication)
+              </div>
+            </div>
+            <ul class="simple-list">
+              <li>メールアドレス・パスワードによる会員登録</li>
+              <li>ログイン / ログアウト（Spring Security セッション管理）</li>
+              <li>BCrypt によるパスワードハッシュ化保存</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col col-right">
+          <div class="placeholder-box">
+            <img class="img" alt="usecase" src="/safehomeppt/useCase.svg">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 5. DB設計 (ERD) ===================== -->
+
+<section class="slide" data-index="5">
+      <header class="slide-header">
+        <div class="slide-title">
+          <span class="badge-no">05</span>
+          <div>DB設計 (Database ERD)</div>
+        </div>
+        <div class="slide-page">05 / 15</div>
+      </header>
+
+      <div class="slide-content">
+        <div class="col col-left" style="overflow-y:auto;padding-right:6px;">
+          <!-- USER -->
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-icon-circle" style="background:rgba(37,99,235,0.1);color:#2563eb;">
+                <i class="fas fa-user"></i>
+              </span>
+              <div class="card-title-text">USER</div>
+            </div>
+            <p class="card-body-text">
+              会員情報を管理する基本テーブル。認証・権限判定の中心となるテーブルで、
+              パスワードは BCrypt でハッシュ化して保存します。
+              <br><span class="column-highlight">id(PK), email, password(BCrypt), role, created_at</span>
+            </p>
+          </div>
+
+          <!-- QUESTION / ANSWER -->
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-icon-circle" style="background:rgba(16,185,129,0.1);color:#059669;">
+                <i class="fas fa-comments"></i>
+              </span>
+              <div class="card-title-text">QUESTION / ANSWER</div>
+            </div>
+            <p class="card-body-text">
+              会員からの質問と管理者による回答を管理。1つの質問に対して複数回答を持てる
+              1:N 構造で、Q&amp;A 掲示板機能の基盤となります。
+              <br><span class="column-highlight">id(PK), user_id(FK), title, content, created_at, updated_at</span>
+            </p>
+          </div>
+
+          <!-- TRANSACTION_RAW -->
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-icon-circle" style="background:rgba(245,158,11,0.1);color:#b45309;">
+                <i class="fas fa-building"></i>
+              </span>
+              <div class="card-title-text">TRANSACTION_RAW</div>
+            </div>
+            <p class="card-body-text">
+              Reinfolib XPT001 から取得した不動産取引価格データの生データテーブル。
+              地図上の物件表示およびフィルター検索の主要なデータソースです。
+              <br><span class="column-highlight">id(PK), price, area, building_type, lat, lng, trade_year</span>
+            </p>
+          </div>
+
+          <!-- HAZARD_ZONE -->
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-icon-circle" style="background:rgba(239,68,68,0.1);color:#b91c1c;">
+                <i class="fas fa-exclamation-triangle"></i>
+              </span>
+              <div class="card-title-text">HAZARD_ZONE</div>
+            </div>
+            <p class="card-body-text">
+              洪水・津波・土砂災害のリスク情報をタイル座標キー（region_code）単位で管理。
+              GeoJSON 形式のポリゴンを LONGTEXT で保存し、キャッシュとして利用します。
+              <br><span class="column-highlight">region_code(tileKey), hazard_type, geojson(LONGTEXT)</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="col col-right">
+          <div class="placeholder-box">
+             <img class="img" alt="erd" src="/safehomeppt/erd.png">
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- ===================== 6. 開発環境・技術スタック ===================== -->
+
+<section class="slide" data-index="6">
+      <header class="slide-header">
+        <div class="slide-title">
+          <span class="badge-no">06</span>
+          <div>開発環境・技術スタック (Tech Stack)</div>
+        </div>
+        <div class="slide-page">06 / 15</div>
+      </header>
+      <div style="flex:1;min-height:0;overflow:hidden;">
+        <div class="tech-grid">
+
+          <div class="tech-column">
+            <div class="column-header backend-col">
+              <h2 class="column-title">Backend</h2><p class="column-subtitle">Server Side Logic</p>
+            </div>
+            <div class="logo-card"><div class="logo-image-container"><img alt="Java 17" class="logo-img" src="https://page.gensparksite.com/slides_images/a894bb3fc25551e10076ae7bccc190b8.webp"/></div><p class="tech-name">Java</p><p class="tech-version">JDK 17 LTS</p></div>
+            <div class="logo-card"><div class="logo-image-container"><img alt="Spring Boot" class="logo-img" src="https://page.gensparksite.com/slides_images/daf473880d356119f50dc3213ecf46d8.svg"/></div><p class="tech-name">Spring Boot</p><p class="tech-version">v3.5.0</p></div>
+            <div class="logo-card"><div class="logo-image-container"><img alt="Spring Security" class="logo-img" src="https://page.gensparksite.com/slides_images/d04af246b8c4210ba4f3fb7348112cc4.svg"/></div><p class="tech-name">Spring Security</p><p class="tech-version">Security 6</p></div>
+            <div class="logo-card"><div class="logo-image-container"><img alt="MyBatis" class="logo-img" src="https://page.gensparksite.com/slides_images/386367ddad435b5683414258dfe12a2d.webp"/></div><p class="tech-name">MyBatis</p><p class="tech-version">v3.0.5</p></div>
+          </div>
+
+          <div class="tech-column">
+            <div class="column-header database-col">
+              <h2 class="column-title">Database</h2><p class="column-subtitle">Data Persistence</p>
+            </div>
+            <div class="logo-card"><div class="logo-image-container"><img alt="MySQL" class="logo-img" src="https://page.gensparksite.com/slides_images/53deef6cfeaea0496ef3b4f510729dcf.webp"/></div><p class="tech-name">MySQL</p><p class="tech-version">v8.0</p></div>
+          </div>
+
+          <div class="tech-column">
+            <div class="column-header frontend-col">
+              <h2 class="column-title">Frontend</h2><p class="column-subtitle">User Interface</p>
+            </div>
+            <div class="logo-card"><div class="logo-image-container"><img alt="Leaflet.js" class="logo-img" src="https://page.gensparksite.com/slides_images/68269291c2cca1dccb3abbb6cb6d43c9.webp"/></div><p class="tech-name">Leaflet.js</p><p class="tech-version">Interactive Map</p></div>
+            <div class="logo-card"><div class="logo-image-container"><img alt="Bootstrap" class="logo-img" src="https://page.gensparksite.com/slides_images/2ea04cb2e70c735b6c8947b3e93e74bd.webp"/></div><p class="tech-name">Bootstrap</p><p class="tech-version">v5.3</p></div>
+            <div class="logo-card"><div class="logo-image-container"><img alt="JavaScript" class="logo-img" src="https://page.gensparksite.com/slides_images/e3209d75503bbcbb114e1a2db62006b3.webp"/></div><p class="tech-name">JavaScript</p><p class="tech-version">ES6+</p></div>
+          </div>
+
+          <div class="tech-column">
+            <div class="column-header api-col">
+              <h2 class="column-title">External API</h2><p class="column-subtitle">Data Integration</p>
+            </div>
+            <div class="logo-card"><div class="logo-image-container" style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;"><i class="fas fa-building" style="font-size:28px;color:#475569;"></i></div><p class="tech-name">Reinfolib API</p><p class="tech-version">MLIT Japan</p></div>
+            <div class="logo-card"><div class="logo-image-container"><img alt="Gemini" class="logo-img" src="https://page.gensparksite.com/slides_images/efc13ecd4cee0961fc3af8270435c851.webp"/></div><p class="tech-name">Gemini API</p><p class="tech-version">1.5 Flash</p></div>
+            <div class="logo-card"><div class="logo-image-container"><img alt="OpenStreetMap" class="logo-img" src="https://page.gensparksite.com/slides_images/f0e9b70c54b836acf88d4bbbfc04f7c1.webp"/></div><p class="tech-name">OpenStreetMap</p><p class="tech-version">Map Tiles</p></div>
+          </div>
+
+          <div class="tech-column">
+            <div class="column-header tools-col">
+              <h2 class="column-title">Tools</h2><p class="column-subtitle">Development Utils</p>
+            </div>
+            <div class="logo-card"><div class="logo-image-container"><img alt="Lombok" class="logo-img" src="https://page.gensparksite.com/slides_images/baef9c0c764e938a9ef25f696118d79f.webp"/></div><p class="tech-name">Lombok</p><p class="tech-version">Boilerplate</p></div>
+            <div class="logo-card"><div class="logo-image-container"><img alt="Thymeleaf" class="logo-img" src="https://page.gensparksite.com/slides_images/3ffd7aea4a4b01ba78443723a34d01d1.webp"/></div><p class="tech-name">Thymeleaf</p><p class="tech-version">Template Engine</p></div>
+            <div class="logo-card"><div class="logo-image-container" style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;"><i class="fas fa-network-wired" style="font-size:28px;color:#475569;"></i></div><p class="tech-name">RestClient</p><p class="tech-version">HTTP Client</p></div>
+          </div>
+
+          <!-- AI TOOLS -->
+          <div class="tech-column">
+            <div class="column-header ai-col">
+              <h2 class="column-title">AI Tools</h2><p class="column-subtitle">Development AI</p>
+            </div>
+            <div class="logo-card">
+              <div class="logo-image-container" style="background:#10a37f;display:flex;align-items:center;justify-content:center;">
+                <svg width="28" height="28" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M37.532 16.87a9.963 9.963 0 0 0-.856-8.184 10.078 10.078 0 0 0-10.855-4.835 9.964 9.964 0 0 0-6.239-3.954 10.078 10.078 0 0 0-11.177 4.931A9.964 9.964 0 0 0 3.543 13.4a10.078 10.078 0 0 0-1.256 11.518 9.963 9.963 0 0 0 .856 8.185 10.079 10.079 0 0 0 10.855 4.835 9.965 9.965 0 0 0 6.239 3.954 10.078 10.078 0 0 0 11.177-4.932 9.965 9.965 0 0 0 4.62-3.554 10.079 10.079 0 0 0 1.497-6.412zM22.498 37.886a7.474 7.474 0 0 1-4.799-1.735c.061-.033.168-.091.237-.134l7.964-4.6a1.294 1.294 0 0 0 .655-1.134V19.054l3.366 1.944a.12.12 0 0 1 .066.092v9.299a7.505 7.505 0 0 1-7.49 7.496zM6.392 31.006a7.471 7.471 0 0 1-.894-5.023c.06.036.162.099.237.141l7.964 4.6a1.297 1.297 0 0 0 1.308 0l9.724-5.614v3.888a.12.12 0 0 1-.048.103l-8.051 4.649a7.504 7.504 0 0 1-10.24-2.744zM4.297 13.62A7.469 7.469 0 0 1 8.2 10.333c0 .068-.004.19-.004.274v9.201a1.294 1.294 0 0 0 .654 1.132l9.723 5.614-3.366 1.944a.12.12 0 0 1-.114.012L7.044 23.86a7.504 7.504 0 0 1-2.747-10.24zm27.658 6.437l-9.724-5.615 3.367-1.943a.121.121 0 0 1 .114-.012l8.048 4.648a7.498 7.498 0 0 1-1.158 13.528v-9.476a1.293 1.293 0 0 0-.647-1.13zm3.35-5.043c-.059-.037-.162-.099-.236-.141l-7.965-4.6a1.298 1.298 0 0 0-1.308 0l-9.723 5.614v-3.888a.12.12 0 0 1 .048-.103l8.05-4.645a7.497 7.497 0 0 1 11.135 7.763zm-21.063 6.929l-3.367-1.944a.12.12 0 0 1-.065-.092v-9.299a7.497 7.497 0 0 1 12.293-5.756 6.94 6.94 0 0 0-.236.134l-7.965 4.6a1.294 1.294 0 0 0-.654 1.132l-.006 11.225zm1.829-3.943l4.33-2.501 4.332 2.499v4.998l-4.331 2.5-4.331-2.5V18z" fill="white"/>
+                </svg>
+              </div>
+              <p class="tech-name">ChatGPT</p><p class="tech-version">GPT-5.2</p>
+            </div>
+            <div class="logo-card">
+              <div class="logo-image-container" style="background:#1a73e8;display:flex;align-items:center;justify-content:center;">
+                <svg width="28" height="28" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M96 20c0 41.9-34.1 76-76 76 41.9 0 76 34.1 76 76 0-41.9 34.1-76 76-76-41.9 0-76-34.1-76-76z" fill="white"/>
+                </svg>
+              </div>
+              <p class="tech-name">Gemini3</p>
+            </div>
+            <div class="logo-card">
+              <div class="logo-image-container" style="background:#fff8f0;display:flex;align-items:center;justify-content:center;">
+                <svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="100" height="100" rx="22" fill="#D97706"/>
+                  <text x="50" y="67" font-family="Georgia,serif" font-size="52" font-weight="900" fill="white" text-anchor="middle">C</text>
+                </svg>
+              </div>
+              <p class="tech-name">Claude.ai</p><p class="tech-version">Anthropic</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 8. 機能要求事項分析（1/3）非会員 ===================== -->
+
+<section class="slide" data-index="7">
+      <header class="slide-header">
+        <div class="slide-title">
+          <span class="badge-no">07</span>
+          <div>Troubleshooting</div>
+        </div>
+        <div class="slide-page">07 / 15</div>
+      </header>
+      <div class="slide-content" style="display: flex; flex-direction: column;">
+        <div class="trouble-full-container">
+          
+          <!-- ISSUE 01 -->
+          <div class="trouble-item-horizontal">
+            <div class="trouble-meta">
+              <span class="issue-tag">ISSUE 01</span>
+              <h3 style="font-size: 17px; font-weight: 700; margin-top: 5px; color:#fff;">Data Overflow</h3>
+            </div>
+            <div class="trouble-issue">
+              <p style="font-weight: 600; color: #1e293b; margin-bottom: 6px; font-size:14px;">MySQL データ長超過</p>
+              <p style="font-size: 13px; color: #64748b; line-height:1.5;">タイルキー（region_code）が DB カラムの文字数制限を超えてデータが切り捨てられる現象が発生。</p>
+            </div>
+            <div class="trouble-solution">
+              <span class="solution-tag">SOLUTION</span>
+              <p style="font-weight: 600; margin-top: 5px; font-size:14px;">Prefix Mapping 戦略を導入</p>
+              <p style="font-size: 13px; color:#374151; line-height:1.5;">繰り返す文字列を短いコードに変換（FLOOD→FL 等）し、キー長を 60% 以上短縮。</p>
+            </div>
+          </div>
+
+          <!-- ISSUE 02 -->
+          <div class="trouble-item-horizontal">
+            <div class="trouble-meta">
+              <span class="issue-tag">ISSUE 02</span>
+              <h3 style="font-size: 17px; font-weight: 700; margin-top: 5px; color:#fff;">State Loss</h3>
+            </div>
+            <div class="trouble-issue">
+              <p style="font-weight: 600; color: #1e293b; margin-bottom: 6px; font-size:14px;">言語切替時に検索パラメータが消える</p>
+              <p style="font-size: 13px; color: #64748b; line-height:1.5;">日/韓 言語切替の際、現在表示中の地図座標と検索フィルターのパラメータが初期化される問題が発生。</p>
+            </div>
+            <div class="trouble-solution">
+              <span class="solution-tag">SOLUTION</span>
+              <p style="font-weight: 600; margin-top: 5px; font-size:14px;">Dynamic Link Resolver を実装</p>
+              <p style="font-size: 13px; color:#374151; line-height:1.5;">URLSearchParams で現在のクエリ文字列を解析し、言語切替ボタンのリンクに動的に結合するスクリプトを適用。</p>
+            </div>
+          </div>
+
+          <!-- ISSUE 03 -->
+          <div class="trouble-item-horizontal">
+            <div class="trouble-meta">
+              <span class="issue-tag">ISSUE 03</span>
+              <h3 style="font-size: 17px; font-weight: 700; margin-top: 5px; color:#fff;">Race Condition</h3>
+            </div>
+            <div class="trouble-issue">
+              <p style="font-weight: 600; color: #1e293b; margin-bottom: 6px; font-size:14px;">非同期レスポンスの逆転現象</p>
+              <p style="font-size: 13px; color: #64748b; line-height:1.5;">素早いフィルター操作時、古いリクエストのレスポンスが最新の結果を上書きし、誤った情報が表示されていた。</p>
+            </div>
+            <div class="trouble-solution">
+              <span class="solution-tag">SOLUTION</span>
+              <p style="font-weight: 600; margin-top: 5px; font-size:14px;">Request ID バリデーション</p>
+              <p style="font-size: 13px; color:#374151; line-height:1.5;">AbortController と固有リクエスト ID 体系を導入し、最後に呼び出されたリクエストのレスポンスのみをレンダリング。</p>
+            </div>
+          </div>
+
+          <!-- 배운점 -->
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:4px;">
+            <div style="background:#fff; border-radius:12px; border:1px solid rgba(15,23,42,0.07); padding:14px 16px; box-shadow:0 4px 12px rgba(15,23,42,0.05);">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                <span style="width:28px;height:28px;border-radius:999px;background:rgba(37,99,235,0.1);color:#2563eb;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <i class="fas fa-database" style="font-size:12px;"></i>
+                </span>
+                <span style="font-size:13px;font-weight:800;color:#0f172a;">DB 設計の重要性</span>
+              </div>
+              <p style="font-size:12px;color:#475569;line-height:1.6;margin:0;">カラム長・型設計のミスは深刻なデータ破損を引き起こす。VARCHAR の上限設計は API のキー仕様を事前調査した上で決定すべきと学んだ。</p>
+            </div>
+            <div style="background:#fff; border-radius:12px; border:1px solid rgba(15,23,42,0.07); padding:14px 16px; box-shadow:0 4px 12px rgba(15,23,42,0.05);">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                <span style="width:28px;height:28px;border-radius:999px;background:rgba(16,185,129,0.1);color:#059669;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <i class="fas fa-link" style="font-size:12px;"></i>
+                </span>
+                <span style="font-size:13px;font-weight:800;color:#0f172a;">URL 状態管理の設計</span>
+              </div>
+              <p style="font-size:12px;color:#475569;line-height:1.6;margin:0;">UI 上の状態（検索条件・言語）は URL に反映させることで、リロードや遷移後も再現できる設計が UX に直結すると実感。</p>
+            </div>
+            <div style="background:#fff; border-radius:12px; border:1px solid rgba(15,23,42,0.07); padding:14px 16px; box-shadow:0 4px 12px rgba(15,23,42,0.05);">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                <span style="width:28px;height:28px;border-radius:999px;background:rgba(245,158,11,0.1);color:#b45309;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <i class="fas fa-bolt" style="font-size:12px;"></i>
+                </span>
+                <span style="font-size:13px;font-weight:800;color:#0f172a;">非同期処理のリスク管理</span>
+              </div>
+              <p style="font-size:12px;color:#475569;line-height:1.6;margin:0;">非同期通信は「速さ」だけでなく「順序の保証」が必要。AbortController でリクエストをキャンセルする手法はフロント開発の基礎として定着した。</p>
+            </div>
+          </div>
+      </div>
+     </div> 
+    </section>
+
+    <!-- ===================== 15. Learning & Future ===================== -->
+
+<section class="slide" data-index="8">
+      <header class="slide-header">
+        <div class="slide-title">
+          <span class="badge-no">08</span>
+          <div>機能要求事項分析（1/3）非会員</div>
+        </div>
+        <div class="slide-page">08 / 15</div>
+      </header>
+
+      <div class="slide-content">
+        <div class="col col-left">
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-blue"><i class="fas fa-map-marked-alt"></i> NEED</span>
+              <div class="card-title-text">地図検索</div>
+            </div>
+            <p class="card-body-text">
+              視覚的に物件を確認したい。エリアごとの相場感を
+              <strong>直感的に把握できる地図インターフェース</strong> が必要。
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-pink"><i class="fas fa-exclamation-triangle"></i> NEED</span>
+              <div class="card-title-text">リスク確認</div>
+            </div>
+            <p class="card-body-text">
+              物件選びと同時に <strong>洪水・津波・土砂災害のリスク</strong> を確認したい。
+              ハザードマップをワンクリックで重ね合わせたい。
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-violet"><i class="fas fa-robot"></i> NEED</span>
+              <div class="card-title-text">AI相談</div>
+            </div>
+            <p class="card-body-text">
+              土地勘のないエリアについて、
+              <strong>AI チャットに「住みやすさ」や「特徴」</strong> を気軽に質問したい。
+              日本語・韓国語の両方で相談できることも重要。
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-emerald"><i class="fas fa-filter"></i> NEED</span>
+              <div class="card-title-text">フィルター</div>
+            </div>
+            <p class="card-body-text">
+              予算や築年数などの条件で絞り込み、<strong>自分に合う物件だけを効率的に探したい</strong>。
+            </p>
+          </div>
+        </div>
+
+        <div class="col col-right">
+          <div class="placeholder-box">
+            <img class="img" alt="guest" src="/safehomeppt/guest.png">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 9. 主要機能デモ（1/3）非会員 ===================== -->
+
+<section class="slide" data-index="9">
+      <header class="slide-header">
+        <div class="slide-title">
+          <span class="badge-no">09</span>
+          <div>主要機能デモ（1/3）非会員</div>
+        </div>
+        <div class="slide-page">09 / 15</div>
+      </header>
+
+      <div class="slide-content">
+        <div class="col col-left">
+          <div class="card" style="margin-bottom:10px;">
+            <div class="card-header-row">
+              <span class="pill-label pill-blue"><i class="fas fa-layer-group"></i> POINT</span>
+              <div class="card-title-text">Leaflet.js 導入</div>
+            </div>
+            <p class="card-body-text">インタラクティブな地図表示とカスタム SVG アイコンによる物件マーカー表示。</p>
+          </div>
+
+          <div class="card" style="margin-bottom:10px;">
+            <div class="card-header-row">
+              <span class="pill-label pill-violet"><i class="fas fa-filter"></i> POINT</span>
+              <div class="card-title-text">多条件フィルター</div>
+            </div>
+            <p class="card-body-text">価格・築年・間取りなどの条件を組み合わせた動的検索。</p>
+          </div>
+
+          <div class="card" style="margin-bottom:10px;">
+            <div class="card-header-row">
+              <span class="pill-label pill-pink"><i class="fas fa-exclamation-triangle"></i> POINT</span>
+              <div class="card-title-text">GeoJSON オーバーレイ</div>
+            </div>
+            <p class="card-body-text">洪水・津波・土砂災害ハザード情報を段階別カラーリングで地図上に重ね合わせ。</p>
+          </div>
+
+          <div class="card" style="margin-bottom:10px;">
+            <div class="card-header-row">
+              <span class="pill-label pill-amber"><i class="fas fa-bolt"></i> POINT</span>
+              <div class="card-title-text">タイル単位の効率的読み込み</div>
+            </div>
+            <p class="card-body-text">
+              現在表示中の地図タイルに対してのみ API を呼び出し、
+              不要な通信を減らすことで表示速度を最適化。
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-emerald"><i class="fas fa-person-shelter"></i> POINT</span>
+              <div class="card-title-text">避難所マーカー</div>
+            </div>
+            <p class="card-body-text">
+              ズームレベルに応じて避難所情報を表示。
+              拡大したときのみ詳細マーカーを表示することで視認性と性能のバランスを確保。
+            </p>
+          </div>
+        </div>
+
+        <div class="col col-right">
+          <div class="placeholder-box">
+			<iframe width="560" height="315" src="https://www.youtube.com/embed/FyguuoNHQ1k?si=FJBD_53DQ1ReR5NA" title="YouTube video player" frameborder="0" 
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" 
+			allowfullscreen></iframe>	
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 10. 機能要求事項分析（2/3）会員 ===================== -->
+
+<section class="slide" data-index="10">
+      <header class="slide-header">
+        <div class="slide-title">
+          <span class="badge-no">10</span>
+          <div>機能要求事項分析（2/3）会員</div>
+        </div>
+        <div class="slide-page">10 / 15</div>
+      </header>
+
+      <div class="slide-content">
+        <div class="col col-left">
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-pink"><i class="fas fa-bullseye"></i> NEED</span>
+              <div class="card-title-text">質問投稿</div>
+            </div>
+            <p class="card-body-text">
+              物件やエリアに関する疑問を、
+              <strong>地図上の位置と結びつけて</strong> 詳細に質問投稿したい。
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-violet"><i class="fas fa-history"></i> NEED</span>
+              <div class="card-title-text">履歴管理</div>
+            </div>
+            <p class="card-body-text">
+              過去に自分が投稿した質問を一覧で確認し、内容の修正や解決済み質問の削除を行いたい。
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-emerald"><i class="fas fa-check-circle"></i> NEED</span>
+              <div class="card-title-text">回答確認</div>
+            </div>
+            <p class="card-body-text">
+              管理者からの信頼できる回答を受け取り、
+              <strong>通知で確認しつつ、いつでも内容を再参照</strong> できるようにしたい。
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-amber"><i class="fas fa-id-card"></i> NEED</span>
+              <div class="card-title-text">マイページ</div>
+            </div>
+            <p class="card-body-text">
+              プロフィール情報・パスワード変更・質問履歴を一元管理できる
+              <strong>個人用マイページ</strong> を利用したい。
+            </p>
+          </div>
+        </div>
+
+        <div class="col col-right">
+          <div class="placeholder-box">
+            <img class="img" alt="user" src="/safehomeppt/user.png">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 11. 主要機能デモ（2/3）会員 ===================== -->
+
+<section class="slide" data-index="11">
+      <header class="slide-header">
+        <div class="slide-title">
+          <span class="badge-no">11</span>
+          <div>主要機能デモ（2/3）会員</div>
+        </div>
+        <div class="slide-page">11 / 15</div>
+      </header>
+
+      <div class="slide-content">
+        <div class="col col-left">
+          <div class="card" style="margin-bottom:10px;">
+            <div class="card-header-row">
+              <span class="pill-label pill-emerald"><i class="fas fa-shield-alt"></i> POINT</span>
+              <div class="card-title-text">Spring Security</div>
+            </div>
+            <p class="card-body-text">ROLE ベースのアクセス制御（RBAC）で USER / ADMIN を明確に切り分け。</p>
+          </div>
+
+          <div class="card" style="margin-bottom:10px;">
+            <div class="card-header-row">
+              <span class="pill-label pill-pink"><i class="fas fa-lock"></i> POINT</span>
+              <div class="card-title-text">BCrypt 暗号化</div>
+            </div>
+            <p class="card-body-text">パスワードを平文ではなく BCrypt のハッシュで保存し、安全性を確保。</p>
+          </div>
+
+          <div class="card" style="margin-bottom:10px;">
+            <div class="card-header-row">
+              <span class="pill-label pill-blue"><i class="fas fa-sync-alt"></i> POINT</span>
+              <div class="card-title-text">AJAX 非同期通信</div>
+            </div>
+            <p class="card-body-text">質問の投稿・編集・削除をページ遷移なしで行い、操作感を向上。</p>
+          </div>
+
+          <div class="card" style="margin-bottom:10px;">
+            <div class="card-header-row">
+              <span class="pill-label pill-amber"><i class="fas fa-user-clock"></i> POINT</span>
+              <div class="card-title-text">セッション管理</div>
+            </div>
+            <p class="card-body-text">
+              ログイン状態を Spring Security のセッションで管理し、
+              権限ごとにアクセス可能な URL を制御。
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-violet"><i class="fas fa-magic"></i> POINT</span>
+              <div class="card-title-text">UX 向上</div>
+            </div>
+            <p class="card-body-text">
+              モーダルウィンドウ・入力チェック・トーストメッセージなどを用い、
+              スムーズで分かりやすい Q&amp;A 体験を実現。
+            </p>
+          </div>
+        </div>
+
+        <div class="col col-right">
+          <div class="placeholder-box">
+			<iframe width="560" height="315" src="https://www.youtube.com/embed/FN1W17FAbWM?si=7KrO2z519yGsLyPw" title="YouTube video player" frameborder="0" 
+			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+			referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 12. 機能要求事項分析（3/3）管理者 ===================== -->
+
+<section class="slide" data-index="12">
+      <header class="slide-header">
+        <div class="slide-title">
+          <span class="badge-no">12</span>
+          <div>機能要求事項分析（3/3）管理者</div>
+        </div>
+        <div class="slide-page">12 / 15</div>
+      </header>
+
+      <div class="slide-content">
+        <div class="col col-left">
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-pink"><i class="fas fa-bullseye"></i> NEED</span>
+              <div class="card-title-text">一括管理</div>
+            </div>
+            <p class="card-body-text">
+              登録されている全会員の情報を一つの画面で効率的に管理したい。
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-amber"><i class="fas fa-bullseye"></i> NEED</span>
+              <div class="card-title-text">Q&amp;A 対応</div>
+            </div>
+            <p class="card-body-text">
+              ユーザーからのすべての質問を一覧で把握し、
+              迅速に回答・管理できる仕組みがほしい。
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-emerald"><i class="fas fa-bullseye"></i> NEED</span>
+              <div class="card-title-text">統計確認</div>
+            </div>
+            <p class="card-body-text">
+              ダッシュボードでサービス利用状況や主要指標（質問数・アクティブユーザー数など）を把握したい。
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-violet"><i class="fas fa-bullseye"></i> NEED</span>
+              <div class="card-title-text">会員管理</div>
+            </div>
+            <p class="card-body-text">
+              利用規約違反やスパム投稿を行うユーザーを特定し、
+              強制退会・権限変更などの管理処理を行いたい。
+            </p>
+          </div>
+        </div>
+
+        <div class="col col-right">
+          <div class="placeholder-box">
+             <img class="img" alt="admin" src="/safehomeppt/admin.png">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 13. 主要機能デモ（3/3）管理者 ===================== -->
+
+<section class="slide" data-index="13">
+      <header class="slide-header">
+        <div class="slide-title">
+          <span class="badge-no">13</span>
+          <div>主要機能デモ（3/3）管理者</div>
+        </div>
+        <div class="slide-page">13 / 15</div>
+      </header>
+
+      <div class="slide-content">
+        <div class="col col-left">
+          <div class="card" style="margin-bottom:10px;">
+            <div class="card-header-row">
+              <span class="pill-label pill-pink"><i class="fas fa-user-shield"></i> POINT</span>
+              <div class="card-title-text">管理者専用フィルタ</div>
+            </div>
+            <p class="card-body-text">セッション情報とロールを基に、管理画面専用フィルタでアクセスを制限。</p>
+          </div>
+          <div class="card" style="margin-bottom:10px;">
+            <div class="card-header-row">
+              <span class="pill-label pill-amber"><i class="fas fa-users-cog"></i> POINT</span>
+              <div class="card-title-text">会員管理システム</div>
+            </div>
+            <p class="card-body-text">会員の状態確認・アクティビティの参照・強制退会処理を実装。</p>
+          </div>
+          <div class="card" style="margin-bottom:10px;">
+            <div class="card-header-row">
+              <span class="pill-label pill-blue"><i class="fas fa-chart-line"></i> POINT</span>
+              <div class="card-title-text">データ可視化</div>
+            </div>
+            <p class="card-body-text">簡易的な統計情報をダッシュボードで確認し、利用傾向を把握。</p>
+          </div>
+          <div class="card" style="margin-bottom:10px;">
+            <div class="card-header-row">
+              <span class="pill-label pill-violet"><i class="fas fa-lock"></i> POINT</span>
+              <div class="card-title-text">不正アクセス遮断</div>
+            </div>
+            <p class="card-body-text">
+              権限のないユーザーが管理画面 URL に直接アクセスした場合、
+              自動的にアクセス拒否またはリダイレクト。
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-header-row">
+              <span class="pill-label pill-emerald"><i class="fas fa-comments"></i> POINT</span>
+              <div class="card-title-text">Q&amp;A 全体管理</div>
+            </div>
+            <p class="card-body-text">
+              全ユーザーの質問を一覧で確認し、回答・非表示・削除などの管理操作を行える。
+            </p>
+          </div>
+        </div>
+
+        <div class="col col-right">
+          <div class="placeholder-box">
+			<iframe width="560" height="315" src="https://www.youtube.com/embed/AYcalojhbCk?si=WcekFkxVkNwfNe2m" title="YouTube video player" 
+			frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+			referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 14. AIチャット機能：Gemini ===================== -->
+
+<section class="slide" data-index="14">
+      <header class="slide-header">
+        <div class="slide-title">
+          <span class="badge-no">14</span>
+          <div>AIチャット機能：Gemini API 地域推薦</div>
+        </div>
+        <div class="slide-page">14 / 15</div>
+      </header>
+
+      <div class="slide-content">
+        <div class="col col-left">
+          <div class="card" style="margin-bottom:10px;">
+            <div class="card-header-row">
+              <span class="pill-label pill-blue"><i class="fas fa-brain"></i> POINT</span>
+              <div class="card-title-text">Gemini 1.5 Flash</div>
+            </div>
+            <p class="card-body-text">
+              ユーザーの希望条件（予算・通勤・災害リスク許容度など）を入力すると、
+              条件に合いそうなエリアを会話形式で提案。
+            </p>
+          </div>
+
+          <div class="card" style="margin-bottom:10px;">
+            <div class="card-header-row">
+              <span class="pill-label pill-emerald"><i class="fas fa-code"></i> POINT</span>
+              <div class="card-title-text">JSON レスポンス整形</div>
+            </div>
+            <p class="card-body-text">
+              Gemini からのレスポンスを JSON 形式で受け取り、
+              <strong>タイトル / 概要 / キーワード</strong> などを分かりやすく整形して表示。
+            </p>
+          </div>
+
+          <div class="card" style="margin-bottom:10px;">
+            <div class="card-header-row">
+              <span class="pill-label pill-violet"><i class="fas fa-language"></i> POINT</span>
+              <div class="card-title-text">多言語対応</div>
+            </div>
+            <p class="card-body-text">
+              日本語・韓国語のどちらで質問しても自然な言語で回答。
+              UI 文言も 2 言語切り替えに対応。
+            </p>
+          </div>
+        </div>
+
+        <div class="col col-right">
+          <div class="placeholder-box">
+			<iframe width="560" height="315" src="https://www.youtube.com/embed/WX-a47Z2JAk?si=MEskr_iEsQvH4AZT" title="YouTube video player" 
+			frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+			referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 15. トラブルシューティング =====================-->
+
+<section class="slide" data-index="15">
+      <header class="slide-header">
+        <div class="slide-title">
+          <span class="badge-no">15</span>
+          <div>Learning &amp; Future</div>
+        </div>
+        <div class="slide-page">15 / 15</div>
+      </header>
+      <div class="slide-content">
+        <!-- 왼쪽: 학습 성과 -->
+        <div class="col col-left">
+          <div class="card" style="flex:1;min-height:0;">
+            <div class="card-header-row">
+              <span class="pill-label pill-blue"><i class="fas fa-graduation-cap"></i> LEARNING</span>
+              <div class="card-title-text">習得した技術・経験</div>
+            </div>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:10px;margin-top:10px;">
+              <li class="item-row">
+                <span class="pill-icon-circle" style="background:rgba(37,99,235,0.1);color:#2563eb;"><i class="fas fa-layer-group"></i></span>
+                <div><div class="item-title">階層型アーキテクチャ</div>
+                <div class="item-desc">Controller → Service → Mapper の役割分担と、テスタブルな構造の実践的な設計経験</div></div>
+              </li>
+              <li class="item-row">
+                <span class="pill-icon-circle" style="background:rgba(16,185,129,0.1);color:#059669;"><i class="fas fa-bolt"></i></span>
+                <div><div class="item-title">API パフォーマンス最適化</div>
+                <div class="item-desc">JVM メモリ / DB / 外部 API の 3 段階キャッシュと Promise.allSettled による並列処理</div></div>
+              </li>
+              <li class="item-row">
+                <span class="pill-icon-circle" style="background:rgba(139,92,246,0.1);color:#5b21b6;"><i class="fas fa-shield-alt"></i></span>
+                <div><div class="item-title">セキュリティ設計</div>
+                <div class="item-desc">Spring Security による RBAC・BCrypt 暗号化・セッション管理を実装し、安全な認証フローを構築</div></div>
+              </li>
+              <li class="item-row">
+                <span class="pill-icon-circle" style="background:rgba(245,158,11,0.1);color:#b45309;"><i class="fas fa-map-marked-alt"></i></span>
+                <div><div class="item-title">地理情報・GeoJSON 活用</div>
+                <div class="item-desc">タイル座標変換・ST_Distance_Sphere・GeoJSON ポリゴン描画まで一連のジオデータ処理を習得</div></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 오른쪽: 개선 방향 -->
+        <div class="col col-right">
+          <div class="card" style="flex:1;min-height:0;">
+            <div class="card-header-row">
+              <span class="pill-label pill-violet"><i class="fas fa-rocket"></i> FUTURE</span>
+              <div class="card-title-text">今後の改善・拡張計画</div>
+            </div>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:10px;margin-top:10px;">
+              <li class="item-row">
+                <span class="pill-icon-circle" style="background:rgba(239,68,68,0.1);color:#b91c1c;"><i class="fas fa-memory"></i></span>
+                <div><div class="item-title">Redis 導入</div>
+                <div class="item-desc">JVM ローカルキャッシュを Redis に移行し、スケールアウト時の整合性を確保</div></div>
+              </li>
+              <li class="item-row">
+                <span class="pill-icon-circle" style="background:rgba(37,99,235,0.1);color:#2563eb;"><i class="fas fa-key"></i></span>
+                <div><div class="item-title">JWT 認証への移行</div>
+                <div class="item-desc">セッション方式からステートレス JWT に切り替え、モバイルアプリ連携も視野に入れる</div></div>
+              </li>
+              <li class="item-row">
+                <span class="pill-icon-circle" style="background:rgba(16,185,129,0.1);color:#059669;"><i class="fas fa-comments"></i></span>
+                <div><div class="item-title">リアルタイム Q&amp;A（WebSocket）</div>
+                <div class="item-desc">STOMP + WebSocket を活用して管理者とユーザー間のリアルタイムチャットを実装</div></div>
+              </li>
+              <li class="item-row">
+                <span class="pill-icon-circle" style="background:rgba(245,158,11,0.1);color:#b45309;"><i class="fab fa-aws"></i></span>
+                <div><div class="item-title">クラウドデプロイ（AWS）</div>
+                <div class="item-desc">EC2 + RDS + S3 構成で本番環境を構築し、実務レベルのインフラ運用を経験する</div></div>
+              </li>
+            </ul>
+          </div>
+          <div class="conclusion-box">
+            🎓 &nbsp;本プロジェクトを通じて「設計 → 実装 → 最適化」の一連のサイクルを経験しました。ご清聴ありがとうございました。
+          </div>
+        </div>
+      </div>
+    </section>
+
+</body>
+</html>
